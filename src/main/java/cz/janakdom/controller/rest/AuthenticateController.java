@@ -1,22 +1,18 @@
-package cz.janakdom.controller;
+package cz.janakdom.controller.rest;
 
 import cz.janakdom.model.AuthRequest;
 import cz.janakdom.util.JwtUtil;
-import lombok.var;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.stream.Collector;
 
 @RestController
+@RequestMapping(value = "/api/authenticate")
 public class AuthenticateController {
 
     @Autowired
@@ -28,18 +24,19 @@ public class AuthenticateController {
     @Autowired
     private Logger log;
 
-    @PostMapping("/authenticate")
-    public String generateToken(@RequestBody AuthRequest authRequest, HttpServletResponse responses, HttpServletRequest request) {
-        return doAuthenticate(authRequest.getUsername(), authRequest.getPassword(), responses, request);
+    @PostMapping("/")
+    @CrossOrigin
+    public String login(@RequestBody AuthRequest authRequest, HttpServletRequest request, HttpServletResponse response) {
+        return doAuthenticate(authRequest.getUsername(), authRequest.getPassword(), request, response);
     }
 
-    @Profile("local")
-    @GetMapping("/authenticate")
-    public String generateToken(@RequestParam String username, @RequestParam String password, HttpServletResponse responses, HttpServletRequest request) {
-        return doAuthenticate(username, password, responses, request);
+    @GetMapping("/")
+    @CrossOrigin
+    public String testLoginViaGet(@RequestParam String username, @RequestParam String password, HttpServletRequest request, HttpServletResponse response) {
+        return "{\"response\":\""+( doAuthenticate(username, password, request, response).contains("INVALID-CREDENTIALS") ? "FAIL" : "OK")+"\"}";
     }
 
-    private String doAuthenticate(String username, String password, HttpServletResponse res, HttpServletRequest req){
+    private String doAuthenticate(String username, String password, HttpServletRequest req, HttpServletResponse response){
         try {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
             authenticationManager.authenticate(token);
@@ -53,12 +50,9 @@ public class AuthenticateController {
                         .append("username: ").append(username).append(", ")
                         .append("password: ").append(password).append("};");
 
-
             log.warn(builder.toString());
             return "{\"response\":\"INVALID-CREDENTIALS\"}";
         }
-
-        res.setStatus(HttpServletResponse.SC_OK);
-        return jwtUtil.generateToken(username);
+        return "{\"response\":\"OK\", \"token\":\"" +  jwtUtil.generateToken(username) + "\"}";
     }
 }
