@@ -30,7 +30,7 @@ public class RegisterController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @PostMapping("/")
+    @PostMapping
     public ApiResponse<AuthToken> register(@RequestBody UserDto user) {
 
         if(user.getUsername().length() <= 3

@@ -31,7 +31,7 @@ public class LoginController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @PostMapping("/")
+    @PostMapping
     public ApiResponse<AuthToken> authenticate(@RequestBody AuthRequest authRequest) throws AuthenticationException {
 
         User user = doAuthenticate(authRequest.getUsername(), authRequest.getPassword());
@@ -44,7 +44,7 @@ public class LoginController {
         return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "INVALID-CREDENTIALS",null);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ApiResponse<Boolean> testLoginViaGet(@RequestParam String username, @RequestParam String password) throws AuthenticationException {
         User user = doAuthenticate(username, password);
 
