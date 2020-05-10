@@ -40,6 +40,6 @@ public class User extends BaseEntity {
     private String email;
 
     @Getter
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "user")
     private final List<QuoteScore> ratedQuotes = new ArrayList<>();
 }

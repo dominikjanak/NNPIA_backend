@@ -34,7 +34,7 @@ public class RegisterController {
     public ApiResponse<AuthToken> register(@RequestBody UserDto user) {
 
         if(user.getUsername().length() <= 3
-            || user.getLastname().isEmpty()
+            || user.getSurname().isEmpty()
             || user.getFirstname().isEmpty()
             || user.getPassword().length() <= 6
             || !isValidEmail(user.getEmail())

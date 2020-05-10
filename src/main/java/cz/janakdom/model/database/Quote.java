@@ -30,7 +30,7 @@ public class Quote extends BaseEntity {
     private Boolean global;
 
     @Getter
-    @OneToMany(mappedBy = "quoteId")
+    @OneToMany(mappedBy = "quote")
     private final List<QuoteScore> scores = new ArrayList<>();
 
     @Getter
