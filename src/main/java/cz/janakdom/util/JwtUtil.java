@@ -17,10 +17,18 @@ import java.util.function.Function;
 import static cz.janakdom.config.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
 import static cz.janakdom.config.Constants.SIGNING_KEY;
 
-@Service
+@Service(value = "jwtUtil")
 public class JwtUtil implements Serializable {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    public String extractToken(String bearer) {
+        if(bearer.startsWith("Bearer ")){
+            return bearer.substring(7);
+        } else {
+            return bearer;
+        }
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
