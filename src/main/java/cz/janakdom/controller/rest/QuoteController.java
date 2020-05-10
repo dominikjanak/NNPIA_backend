@@ -4,13 +4,16 @@ import cz.janakdom.model.ApiResponse;
 import cz.janakdom.model.database.Quote;
 import cz.janakdom.model.dto.QuoteDto;
 import cz.janakdom.service.QuoteService;
+import cz.janakdom.util.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import static cz.janakdom.config.Constants.HEADER_STRING;
 
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/quote")
@@ -20,43 +23,52 @@ public class QuoteController {
     @Autowired
     private QuoteService quoteService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/")
-    public ApiResponse<Quote> saveQuote(@RequestBody QuoteDto quote){
+    public ApiResponse<Quote> saveQuote(@RequestHeader(HEADER_STRING) String token, @RequestBody QuoteDto quote){
+        String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
 
         if(quoteService.findByQuote(quote.getQuote()) != null){
             return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "ALREADY-EXISTS",null);
         }
 
-        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", quoteService.save(quote));
+        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", quoteService.save(quote, username));
     }
 
     @GetMapping("/")
-    public ApiResponse<List<Quote>> listQuote(){
-        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", quoteService.findAll());
+    public ApiResponse<Page<Quote>> listQuotes(@RequestHeader(HEADER_STRING) String token, Pageable pageable){
+        String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
+        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", quoteService.findAllByUser(username, pageable));
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Quote> getOneQuote(@PathVariable int id){
-        Quote quote = quoteService.findById(id);
+    public ApiResponse<Quote> getOneQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id, Pageable pageable){
+        String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
+        Quote quote = quoteService.findById(id, username);
         return new ApiResponse<>(HttpStatus.OK.value(), quote == null ? "NOT-EXISTS" : "SUCCESS", quote);
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<QuoteDto> updateQuote(@RequestBody QuoteDto quoteDto, @PathVariable int id) {
+    public ApiResponse<QuoteDto> updateQuote(@RequestHeader(HEADER_STRING) String token, @RequestBody QuoteDto quoteDto, @PathVariable int id) {
+        String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
+
         if(!quoteService.canBeUpdate(id, quoteDto.getQuote())){
             return new ApiResponse<>(HttpStatus.OK.value(), "ALREADY-EXISTS", null);
         }
 
-        QuoteDto quote = quoteService.update(id, quoteDto);
+        QuoteDto quote = quoteService.update(id, username, quoteDto);
         return new ApiResponse<>(HttpStatus.OK.value(), quote==null ? "NOT-FOUND" : "SUCCESS", quote);
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteQuote(@PathVariable int id) {
-        Quote quote = quoteService.findById(id);
-        if(quote != null) quoteService.delete(id);
+    public ApiResponse<Void> deleteQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id) {
+        String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
+        Quote quote = quoteService.findById(id, username);
+        if(quote != null) quoteService.delete(id, username);
         return new ApiResponse<Void>(HttpStatus.NOT_ACCEPTABLE.value(), quote == null ? "NOT-FOUND" : "SUCCESS", null);
     }
 }

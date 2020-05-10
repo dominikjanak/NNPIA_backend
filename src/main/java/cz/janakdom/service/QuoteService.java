@@ -5,15 +5,12 @@ import cz.janakdom.model.database.Author;
 import cz.janakdom.model.database.Category;
 import cz.janakdom.model.database.Quote;
 import cz.janakdom.model.database.User;
-import cz.janakdom.model.dto.AuthorDto;
 import cz.janakdom.model.dto.QuoteDto;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service(value = "quoteService")
@@ -30,13 +27,13 @@ public class QuoteService {
         this.dao = dao;
     }
 
-    public List<Quote> findAll(){
-        return dao.findAll();
+    public Quote findById(int id, String username) {
+        Optional<Quote> optional = Optional.ofNullable(dao.findByIdAndUserUsername(id, username));
+        return optional.orElse(null);
     }
 
-    public Quote findById(int id) {
-        Optional<Quote> optional = dao.findById(id);
-        return optional.orElse(null);
+    public Page<Quote> findAllByUser(String username, Pageable pageable){
+        return dao.findAllByUserUsername(username, pageable);
     }
 
     public Quote findByQuote(String quote){
@@ -48,14 +45,14 @@ public class QuoteService {
         return findByQuote(quote) != null;
     }
 
-    public void delete(int id) {
-        dao.deleteById(id);
+    public void delete(int id, String username) {
+        dao.deleteByIdAndUserUsername(id, username);
     }
 
-    public QuoteDto update(Integer id, QuoteDto quoteDto) {
-        Quote quote = findById(id);
+    public QuoteDto update(Integer id, String username, QuoteDto quoteDto) {
+        Quote quote = findById(id, username);
         if(quote != null) {
-            quote = fillQuote(quoteDto, quote);
+            quote = fillQuote(quoteDto, null, quote);
 
             if(quote == null)
                 return null;
@@ -66,8 +63,8 @@ public class QuoteService {
         return null;
     }
 
-    public Quote save(QuoteDto quote) {
-        Quote newQuote = fillQuote(quote, null);
+    public Quote save(QuoteDto quote, String username) {
+        Quote newQuote = fillQuote(quote, username, null);
 
         if(newQuote == null)
             return null;
@@ -75,7 +72,7 @@ public class QuoteService {
         return dao.save(newQuote);
     }
 
-    private Quote fillQuote(QuoteDto quote, Quote filled){
+    private Quote fillQuote(QuoteDto quote, String username, Quote filled){
         if(filled == null){
             filled = new Quote();
         }
@@ -84,14 +81,17 @@ public class QuoteService {
         filled.setQuote(quote.getQuote());
 
         Author author = authorService.findById(quote.getAuthorId());
-        User user = userService.findByUsername(quote.getUsername());
+        filled.setAuthor(author);
+
+        User user = null;
+        if(filled.getUser() == null){
+            user = userService.findByUsername(username);
+            filled.setUser(user);
+        }
 
         if(author == null || user == null){
             return null;
         }
-
-        filled.setAuthor(author);
-        filled.setUser(user);
 
         filled.getCategories().clear();
 

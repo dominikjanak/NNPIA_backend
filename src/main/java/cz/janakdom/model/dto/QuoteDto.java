@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 public class QuoteDto {
     private Integer authorId;
-    private String username;
     private String quote;
     private Boolean global;
     List<Integer> categories;
