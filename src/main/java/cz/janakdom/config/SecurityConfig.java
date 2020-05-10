@@ -1,7 +1,7 @@
 package cz.janakdom.config;
 
-import cz.janakdom.security.CustomUserDetailsService;
 import cz.janakdom.security.JwtFilter;
+import cz.janakdom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,14 +21,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private UserService userService;
 
     @Autowired
     private JwtFilter jwtFilter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
+        auth.userDetailsService(userService);
     }
 
     @Bean
@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/authenticate/").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling()
