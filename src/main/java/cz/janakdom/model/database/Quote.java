@@ -1,5 +1,6 @@
 package cz.janakdom.model.database;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.janakdom.model._base.BaseEntity;
 import lombok.*;
 
@@ -28,6 +29,12 @@ public class Quote extends BaseEntity {
     @Setter
     @Column(nullable = false)
     private Boolean global;
+
+    @Getter
+    @Setter
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Getter
     @OneToMany(mappedBy = "quote")

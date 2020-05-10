@@ -37,9 +37,16 @@ public class User extends BaseEntity {
     @Getter
     @Setter
     @Column(length = 100, unique = true)
+    @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
     private String email;
 
     @Getter
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
+    private final List<Quote> quotes = new ArrayList<>();
+
+    @Getter
     @OneToMany(mappedBy = "user")
+    @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
     private final List<QuoteScore> ratedQuotes = new ArrayList<>();
 }

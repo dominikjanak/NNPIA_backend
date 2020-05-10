@@ -4,6 +4,7 @@ import cz.janakdom.dao.QuoteDao;
 import cz.janakdom.model.database.Author;
 import cz.janakdom.model.database.Category;
 import cz.janakdom.model.database.Quote;
+import cz.janakdom.model.database.User;
 import cz.janakdom.model.dto.AuthorDto;
 import cz.janakdom.model.dto.QuoteDto;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,7 @@ public class QuoteService {
 
     @Autowired private AuthorService authorService;
     @Autowired private CategoryService categoryService;
+    @Autowired private UserService userService;
 
     @Autowired
     public QuoteService(QuoteDao dao) {
@@ -82,12 +84,14 @@ public class QuoteService {
         filled.setQuote(quote.getQuote());
 
         Author author = authorService.findById(quote.getAuthorId());
+        User user = userService.findByUsername(quote.getUsername());
 
-        if(author == null){
+        if(author == null || user == null){
             return null;
         }
 
         filled.setAuthor(author);
+        filled.setUser(user);
 
         filled.getCategories().clear();
 
