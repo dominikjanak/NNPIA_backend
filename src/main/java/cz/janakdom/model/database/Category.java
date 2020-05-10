@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,6 +22,6 @@ public class Category extends BaseEntity {
 
     @Getter
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
-    @ManyToMany(mappedBy = "quoteCategories")
-    private List<Quote> quotes;
+    @ManyToMany(mappedBy = "categories")
+    private final List<Quote> quotes = new ArrayList<>();
 }

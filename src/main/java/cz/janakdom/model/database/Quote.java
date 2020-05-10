@@ -4,6 +4,7 @@ import cz.janakdom.model._base.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -14,11 +15,6 @@ public class Quote extends BaseEntity {
 
     @Getter
     @Setter
-    @Column(nullable = false, length = 35, unique = true)
-    private String name;
-
-    @Getter
-    @Setter
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
@@ -26,7 +22,7 @@ public class Quote extends BaseEntity {
     @Getter
     @Setter
     @Column(nullable = false, length = 1000, unique = true)
-    private String Quote;
+    private String quote;
 
     @Getter
     @Setter
@@ -35,7 +31,7 @@ public class Quote extends BaseEntity {
 
     @Getter
     @OneToMany(mappedBy = "quoteId")
-    List<QuoteScore> quoteScores;
+    private final List<QuoteScore> scores = new ArrayList<>();
 
     @Getter
     @ManyToMany
@@ -43,6 +39,6 @@ public class Quote extends BaseEntity {
             name = "quote_category",
             joinColumns = @JoinColumn(name = "quote_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    List<Category> quoteCategories;
+    private final List<Category> categories = new ArrayList<>();
 
 }

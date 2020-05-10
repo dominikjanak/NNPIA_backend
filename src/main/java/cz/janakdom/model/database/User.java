@@ -5,6 +5,7 @@ import cz.janakdom.model._base.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -39,7 +40,6 @@ public class User extends BaseEntity {
     private String email;
 
     @Getter
-    @Setter
     @OneToMany(mappedBy = "userId")
-    List<QuoteScore> ratedQuotes;
+    private final List<QuoteScore> ratedQuotes = new ArrayList<>();
 }
