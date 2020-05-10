@@ -2,6 +2,7 @@ package cz.janakdom.service;
 
 import cz.janakdom.dao.AuthorDao;
 import cz.janakdom.model.database.Author;
+import cz.janakdom.model.database.Category;
 import cz.janakdom.model.dto.AuthorDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,5 +57,11 @@ public class AuthorService {
         Author newAuthor = new Author();
         BeanUtils.copyProperties(author, newAuthor);
         return dao.save(newAuthor);
+    }
+
+    public boolean canBeUpdate(int id, String firstname, String surname) {
+        Author author = findByName(firstname, surname);
+        if(author == null) return true;
+        return author.getId() == id;
     }
 }

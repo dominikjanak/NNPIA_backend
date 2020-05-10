@@ -45,9 +45,7 @@ public class AuthorController {
 
     @PutMapping("/{id}")
     public ApiResponse<AuthorDto> updateAuthor(@RequestBody AuthorDto authorDto, @PathVariable int id) {
-        Author newTest = authorService.findByName(authorDto.getFirstname(), authorDto.getSurname());
-
-        if(newTest != null){
+        if(!authorService.canBeUpdate(id, authorDto.getFirstname(), authorDto.getSurname())){
             return new ApiResponse<>(HttpStatus.OK.value(), "ALREADY-EXISTS", null);
         }
 
