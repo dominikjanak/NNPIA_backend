@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/login")
+@RequestMapping(value = "/api")
 public class LoginController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class LoginController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @PostMapping
+    @PostMapping("/login")
     public ApiResponse<AuthToken> authenticate(@RequestBody AuthRequest authRequest) throws AuthenticationException {
 
         User user = doAuthenticate(authRequest.getUsername(), authRequest.getPassword());
@@ -44,7 +44,7 @@ public class LoginController {
         return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "INVALID-CREDENTIALS",null);
     }
 
-    @GetMapping
+    @GetMapping("/login")
     public ApiResponse<Boolean> testLoginViaGet(@RequestParam String username, @RequestParam String password) throws AuthenticationException {
         User user = doAuthenticate(username, password);
 
@@ -54,6 +54,11 @@ public class LoginController {
         }
 
         return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "INVALID-CREDENTIALS",false);
+    }
+
+    @RequestMapping("/logout")
+    public ApiResponse<Void> logout() throws AuthenticationException {
+        return new ApiResponse<>(200, "success",null);
     }
 
     private User doAuthenticate(String username, String password){
