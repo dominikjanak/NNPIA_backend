@@ -32,6 +32,11 @@ public class QuoteService {
         return optional.orElse(null);
     }
 
+    public Quote findById(int id) {
+        Optional<Quote> optional = dao.findById(id);
+        return optional.orElse(null);
+    }
+
     public Page<Quote> findAllByUser(String username, Pageable pageable){
         return dao.findAllByUserUsername(username, pageable);
     }
