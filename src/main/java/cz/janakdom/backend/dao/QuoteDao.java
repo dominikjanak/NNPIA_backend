@@ -10,4 +10,5 @@ public interface QuoteDao extends JpaRepository<Quote, Integer> {
     Quote findByIdAndUserUsername(Integer id, String user_username);
     void deleteByIdAndUserUsername(Integer id, String user_username);
     Page<Quote> findAllByUserUsername(String user_username, Pageable pageable);
+    Page<Quote> findAll(Pageable pageable);
 }

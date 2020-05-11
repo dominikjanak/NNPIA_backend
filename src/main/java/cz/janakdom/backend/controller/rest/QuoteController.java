@@ -43,7 +43,7 @@ public class QuoteController {
     @GetMapping("/")
     public ApiResponse<Page<Quote>> listQuotes(@RequestHeader(HEADER_STRING) String token, Pageable pageable){
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
-        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", quoteService.findAllByUser(username, pageable));
+        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", quoteService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

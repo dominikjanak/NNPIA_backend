@@ -41,6 +41,10 @@ public class QuoteService {
         return dao.findAllByUserUsername(username, pageable);
     }
 
+    public Page<Quote> findAll(Pageable pageable){
+        return dao.findAll(pageable);
+    }
+
     public Quote findByQuote(String quote){
         Optional<Quote> optional = Optional.ofNullable(dao.findByQuote(quote));
         return optional.orElse(null);
