@@ -38,7 +38,7 @@ public class LoginController {
 
         if(user != null){
             final String token = jwtUtil.generateToken(user.getUsername());
-            return new ApiResponse<>(200, "SUCCESS", new AuthToken(user.getId(), user.getUsername(), token));
+            return new ApiResponse<>(200, "SUCCESS", new AuthToken(user.getUsername(), token));
         }
 
         return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "INVALID-CREDENTIALS",null);

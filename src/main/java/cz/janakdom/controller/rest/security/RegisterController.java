@@ -51,7 +51,7 @@ public class RegisterController {
         if (findUser == null){
             User persisted = userService.save(user);
             final String token = jwtUtil.generateToken(persisted.getUsername());
-            return new ApiResponse<>(200, "SUCCESS",new AuthToken(persisted.getId(), persisted.getUsername(), token));
+            return new ApiResponse<>(200, "SUCCESS",new AuthToken(persisted.getUsername(), token));
         }
 
         return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "ALREADY-EXISTS",null);
