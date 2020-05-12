@@ -2,6 +2,7 @@ package cz.janakdom.backend.controller.rest;
 
 import cz.janakdom.backend.model.ApiResponse;
 import cz.janakdom.backend.model.database.Quote;
+import cz.janakdom.backend.model.dto.OutputQuoteDto;
 import cz.janakdom.backend.model.dto.QuoteDto;
 import cz.janakdom.backend.security.JwtUtil;
 import cz.janakdom.backend.service.QuoteService;
@@ -41,15 +42,15 @@ public class QuoteController {
     }
 
     @GetMapping("/")
-    public ApiResponse<Page<Quote>> listQuotes(@RequestHeader(HEADER_STRING) String token, Pageable pageable){
+    public ApiResponse<Page<OutputQuoteDto>> listQuotes(@RequestHeader(HEADER_STRING) String token, Pageable pageable){
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
-        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", quoteService.findAll(pageable));
+        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", quoteService.findAll(username, pageable));
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<Quote> getOneQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id, Pageable pageable){
+    public ApiResponse<OutputQuoteDto> getOneQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id, Pageable pageable){
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
-        Quote quote = quoteService.findById(id, username);
+        OutputQuoteDto quote = quoteService.convertQuote(quoteService.findById(id, username), username);
         return new ApiResponse<>(HttpStatus.OK.value(), quote == null ? "NOT-EXISTS" : "SUCCESS", quote);
     }
 

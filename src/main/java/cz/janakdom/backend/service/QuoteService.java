@@ -1,17 +1,20 @@
 package cz.janakdom.backend.service;
 
 import cz.janakdom.backend.dao.QuoteDao;
-import cz.janakdom.backend.model.database.Author;
-import cz.janakdom.backend.model.database.Category;
-import cz.janakdom.backend.model.database.Quote;
-import cz.janakdom.backend.model.database.User;
+import cz.janakdom.backend.model.database.*;
+import cz.janakdom.backend.model.dto.OutputQuoteDto;
 import cz.janakdom.backend.model.dto.QuoteDto;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service(value = "quoteService")
 public class QuoteService {
@@ -37,12 +40,42 @@ public class QuoteService {
         return optional.orElse(null);
     }
 
-    public Page<Quote> findAllByUser(String username, Pageable pageable){
-        return dao.findAllByUserUsername(username, pageable);
+    public Page<OutputQuoteDto> findAllByUser(String username, Pageable pageable){
+        Page<Quote> quotes = dao.findAllByUserUsername(username, pageable);
+
+        return createQuotePage(quotes, username);
     }
 
-    public Page<Quote> findAll(Pageable pageable){
-        return dao.findAll(pageable);
+    public Page<OutputQuoteDto> findAll(String username, Pageable pageable){
+        Page<Quote> quotes = dao.findAll(pageable);
+        return createQuotePage(quotes, username);
+    }
+
+    public Page<OutputQuoteDto> createQuotePage(Page<Quote> quotes, String username){
+        List<OutputQuoteDto> output = new ArrayList<>();
+
+        for (Quote q : quotes.getContent()) {
+            output.add(convertQuote(q, username));
+        }
+        return new PageImpl<>(output, quotes.getPageable(), output.size());
+    }
+
+    public OutputQuoteDto convertQuote(Quote quote, String username){
+        OutputQuoteDto newQ = new OutputQuoteDto();
+        BeanUtils.copyProperties(quote, newQ, "scores");
+        newQ.setUservoted(false);
+        newQ.setUserscore(0);
+
+        int sum = quote.getScores().stream().mapToInt(QuoteScore::getScore).sum();
+        List<QuoteScore> userscore = quote.getScores().stream().filter(o -> o.getUser().getUsername().equals(username)).collect(Collectors.toList());
+
+        newQ.setScore(sum / (double)quote.getScores().size());
+
+        if(userscore.size() == 1){
+            newQ.setUserscore(userscore.get(0).getScore());
+            newQ.setUservoted(true);
+        }
+        return newQ;
     }
 
     public Quote findByQuote(String quote){
