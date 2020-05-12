@@ -66,8 +66,8 @@ public class QuoteService {
         newQ.setUservoted(false);
         newQ.setUserscore(0);
 
-        int sum = quote.getScores().stream().mapToInt(QuoteScore::getScore).sum();
-        List<QuoteScore> userscore = quote.getScores().stream().filter(o -> o.getUser().getUsername().equals(username)).collect(Collectors.toList());
+        int sum = quote.getScores().stream().mapToInt(QuoteRating::getScore).sum();
+        List<QuoteRating> userscore = quote.getScores().stream().filter(o -> o.getUser().getUsername().equals(username)).collect(Collectors.toList());
 
         newQ.setScore(sum / (double)quote.getScores().size());
 

@@ -2,11 +2,9 @@ package cz.janakdom.backend.model.dto;
 
 import cz.janakdom.backend.model.database.Author;
 import cz.janakdom.backend.model.database.Category;
-import cz.janakdom.backend.model.database.QuoteScore;
 import cz.janakdom.backend.model.database.User;
 import lombok.*;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

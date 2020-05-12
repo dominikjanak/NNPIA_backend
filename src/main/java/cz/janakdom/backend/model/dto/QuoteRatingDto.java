@@ -5,8 +5,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuoteScoreDto {
+public class QuoteRatingDto {
     private Integer quoteId;
-    private Integer userId;
     private byte score;
 }

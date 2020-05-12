@@ -50,5 +50,5 @@ public class User extends BaseEntity {
     @Getter
     @OneToMany(mappedBy = "user")
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
-    private final List<QuoteScore> ratedQuotes = new ArrayList<>();
+    private final List<QuoteRating> ratedQuotes = new ArrayList<>();
 }

@@ -8,7 +8,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "quote_score")
-public class QuoteScore {
+public class QuoteRating {
 
     @Getter
     @Setter

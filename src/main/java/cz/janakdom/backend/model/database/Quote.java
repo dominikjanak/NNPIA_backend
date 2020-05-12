@@ -36,7 +36,7 @@ public class Quote extends BaseEntity {
 
     @Getter
     @OneToMany(mappedBy = "quote")
-    private final List<QuoteScore> scores = new ArrayList<>();
+    private final List<QuoteRating> scores = new ArrayList<>();
 
     @Getter
     @ManyToMany
