@@ -35,7 +35,7 @@ public class QuoteController {
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
 
         if(quoteService.findByQuote(quote.getQuote()) != null){
-            return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "ALREADY-EXISTS",null);
+            return new ApiResponse<>(HttpStatus.OK.value(), "ALREADY-EXISTS",null);
         }
 
         return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", quoteService.save(quote, username));

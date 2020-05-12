@@ -25,7 +25,7 @@ public class CategoryController {
     public ApiResponse<Category> saveCategory(@RequestBody CategoryDto category){
 
         if(categoryService.findByName(category.getName()) != null){
-            return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "ALREADY-EXISTS",null);
+            return new ApiResponse<>(HttpStatus.OK.value(), "ALREADY-EXISTS",null);
         }
 
         return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", categoryService.save(category));
@@ -57,6 +57,6 @@ public class CategoryController {
     public ApiResponse<Void> deleteCategory(@PathVariable int id) {
         Category category = categoryService.findById(id);
         if(category != null) categoryService.delete(id);
-        return new ApiResponse<Void>(HttpStatus.NOT_ACCEPTABLE.value(), category == null ? "NOT-FOUND" : "SUCCESS", null);
+        return new ApiResponse<Void>(HttpStatus.OK.value(), category == null ? "NOT-FOUND" : "SUCCESS", null);
     }
 }

@@ -26,7 +26,7 @@ public class AuthorController {
     public ApiResponse<Author> saveAuthor(@RequestBody AuthorDto author){
 
         if(authorService.findByName(author.getFirstname(), author.getSurname()) != null){
-            return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "ALREADY-EXISTS",null);
+            return new ApiResponse<>(HttpStatus.OK.value(), "ALREADY-EXISTS",null);
         }
 
         return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", authorService.save(author));
@@ -57,6 +57,6 @@ public class AuthorController {
     public ApiResponse<Void> deleteAuthor(@PathVariable int id) {
         Author author = authorService.findById(id);
         if(author != null) authorService.delete(id);
-        return new ApiResponse<Void>(HttpStatus.NOT_ACCEPTABLE.value(), author == null ? "NOT-FOUND" : "SUCCESS", null);
+        return new ApiResponse<Void>(HttpStatus.OK.value(), author == null ? "NOT-FOUND" : "SUCCESS", null);
     }
 }

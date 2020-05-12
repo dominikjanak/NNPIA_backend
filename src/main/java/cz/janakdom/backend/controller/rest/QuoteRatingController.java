@@ -39,7 +39,7 @@ public class QuoteRatingController {
         User user = userService.findByUsername(username);
 
         if(quoteRatingService.findById(quoteRating, user.getId()) != null){
-            return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "ALREADY-EXISTS",null);
+            return new ApiResponse<>(HttpStatus.OK.value(), "ALREADY-EXISTS",null);
         }
 
         if(userService.findById(user.getId()) == null || quoteService.findById(quoteRating.getQuoteId()) == null){
@@ -83,6 +83,6 @@ public class QuoteRatingController {
     public ApiResponse<Void> deleteQuoteRating(@PathVariable int quoteId, @PathVariable int userId) {
         QuoteRating quoteRating = quoteRatingService.findById(quoteId, userId);
         if(quoteRating != null) quoteRatingService.delete(quoteRating);
-        return new ApiResponse<Void>(HttpStatus.NOT_ACCEPTABLE.value(), quoteRating == null ? "NOT-FOUND" : "SUCCESS", null);
+        return new ApiResponse<Void>(HttpStatus.OK.value(), quoteRating == null ? "NOT-FOUND" : "SUCCESS", null);
     }
 }
