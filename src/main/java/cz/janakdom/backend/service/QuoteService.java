@@ -54,8 +54,8 @@ public class QuoteService {
         return findByQuote(quote) != null;
     }
 
-    public void delete(int id, String username) {
-        dao.deleteByIdAndUserUsername(id, username);
+    public void delete(int id) {
+        dao.deleteById(id);
     }
 
     public QuoteDto update(Integer id, String username, QuoteDto quoteDto) {

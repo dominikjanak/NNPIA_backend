@@ -69,7 +69,7 @@ public class QuoteController {
     public ApiResponse<Void> deleteQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id) {
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
         Quote quote = quoteService.findById(id, username);
-        if(quote != null) quoteService.delete(id, username);
-        return new ApiResponse<Void>(HttpStatus.NOT_ACCEPTABLE.value(), quote == null ? "NOT-FOUND" : "SUCCESS", null);
+        if(quote != null) quoteService.delete(quote.getId());
+        return new ApiResponse<Void>(HttpStatus.OK.value(), quote == null ? "NOT-FOUND" : "SUCCESS", null);
     }
 }
