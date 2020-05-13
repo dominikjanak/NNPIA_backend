@@ -58,6 +58,17 @@ public class QuoteController {
         return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", outputQuote);
     }
 
+    @GetMapping("/public/{id}")
+    public ApiResponse<OutputQuoteDto> getPublic(@PathVariable int id) {
+        Quote quote = quoteService.getPublic(id);
+        OutputQuoteDto outputQuote = null;
+        if(quote != null){
+            outputQuote = quoteService.convertQuote(quote, null);
+        }
+
+        return new ApiResponse<>(HttpStatus.OK.value(), outputQuote==null ? "NOT-FOUND" : "SUCCESS", outputQuote);
+    }
+
     @PutMapping("/{id}")
     public ApiResponse<QuoteDto> updateQuote(@RequestHeader(HEADER_STRING) String token, @RequestBody QuoteDto quoteDto, @PathVariable int id) {
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));

@@ -40,6 +40,10 @@ public class QuoteService {
         return optional.orElse(null);
     }
 
+    public Quote getPublic(int id){
+        return dao.findByIdAndGlobal(id, true);
+    }
+
     public Page<OutputQuoteDto> findAllByUser(String username, Pageable pageable){
         Page<Quote> quotes = dao.findAllByUserUsername(username, pageable);
 
@@ -76,13 +80,14 @@ public class QuoteService {
         newQ.setUserscore(0);
 
         int sum = quote.getScores().stream().mapToInt(QuoteRating::getScore).sum();
-        List<QuoteRating> userscore = quote.getScores().stream().filter(o -> o.getUser().getUsername().equals(username)).collect(Collectors.toList());
-
         newQ.setScore(sum / (double)quote.getScores().size());
 
-        if(userscore.size() == 1){
-            newQ.setUserscore(userscore.get(0).getScore());
-            newQ.setUservoted(true);
+        if(username != null){
+            List<QuoteRating> userscore = quote.getScores().stream().filter(o -> o.getUser().getUsername().equals(username)).collect(Collectors.toList());
+            if(userscore.size() == 1){
+                newQ.setUserscore(userscore.get(0).getScore());
+                newQ.setUservoted(true);
+            }
         }
         return newQ;
     }
