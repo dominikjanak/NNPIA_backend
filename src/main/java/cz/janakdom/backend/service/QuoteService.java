@@ -57,7 +57,7 @@ public class QuoteService {
         for (Quote q : quotes.getContent()) {
             output.add(convertQuote(q, username));
         }
-        return new PageImpl<>(output, quotes.getPageable(), output.size());
+        return new PageImpl<>(output, quotes.getPageable(), quotes.getTotalElements());
     }
 
     public OutputQuoteDto convertQuote(Quote quote, String username){
