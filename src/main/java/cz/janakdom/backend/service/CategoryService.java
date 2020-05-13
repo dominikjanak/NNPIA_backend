@@ -4,6 +4,8 @@ import cz.janakdom.backend.dao.CategoryDao;
 import cz.janakdom.backend.model.database.Category;
 import cz.janakdom.backend.model.dto.CategoryDto;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -17,8 +19,8 @@ public class CategoryService {
         this.dao = dao;
     }
 
-    public List<Category> findAll(){
-        return dao.findAll();
+    public Page<Category> findAll(Pageable pageable){
+        return dao.findAll(pageable);
     }
 
     public Category findById(int id) {

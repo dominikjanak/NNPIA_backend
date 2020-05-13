@@ -5,6 +5,8 @@ import cz.janakdom.backend.model.database.Author;
 import cz.janakdom.backend.model.dto.AuthorDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +22,8 @@ public class AuthorService {
         this.dao = dao;
     }
 
-    public List<Author> findAll(){
-        return dao.findAllByOrderBySurnameAscFirstnameAsc();
+    public Page<Author> findAll(Pageable pageable){
+        return dao.findAll(pageable);
     }
 
     public Author findById(int id) {

@@ -7,6 +7,8 @@ import cz.janakdom.backend.service.AuthorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +35,8 @@ public class AuthorController {
     }
 
     @GetMapping("/")
-    public ApiResponse<List<Author>> listAuthor(){
-        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", authorService.findAll());
+    public ApiResponse<Page<Author>> listAuthor(Pageable pageable){
+        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", authorService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

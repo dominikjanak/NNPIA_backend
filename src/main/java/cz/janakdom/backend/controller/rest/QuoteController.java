@@ -48,7 +48,7 @@ public class QuoteController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<OutputQuoteDto> getOneQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id, Pageable pageable){
+    public ApiResponse<OutputQuoteDto> getOneQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id){
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
         Quote quote = quoteService.findById(id, username);
         if(quote == null){
