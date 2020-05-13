@@ -122,16 +122,17 @@ public class QuoteService {
         filled.setGlobal(quote.getGlobal());
         filled.setQuote(quote.getQuote());
 
-        Author author = authorService.findById(quote.getAuthorId());
-        filled.setAuthor(author);
+        if(filled.getAuthor() == null || !filled.getAuthor().getId().equals(quote.getAuthorId())) {
+            Author author = authorService.findById(quote.getAuthorId());
+            filled.setAuthor(author);
+        }
 
-        User user = null;
         if(filled.getUser() == null){
-            user = userService.findByUsername(username);
+            User user = userService.findByUsername(username);
             filled.setUser(user);
         }
 
-        if(author == null || user == null){
+        if(filled.getAuthor() == null || filled.getUser() == null){
             return null;
         }
 
