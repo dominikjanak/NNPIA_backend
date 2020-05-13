@@ -51,6 +51,15 @@ public class QuoteService {
         return createQuotePage(quotes, username);
     }
 
+    public Quote changeState(int quoteId, boolean newState, String username){
+        Quote quote = findById(quoteId, username);
+        if(quote != null){
+            quote.setGlobal(newState);
+            return save(quote);
+        }
+        return null;
+    }
+
     public Page<OutputQuoteDto> createQuotePage(Page<Quote> quotes, String username){
         List<OutputQuoteDto> output = new ArrayList<>();
 

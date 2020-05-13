@@ -70,6 +70,13 @@ public class QuoteController {
         return new ApiResponse<>(HttpStatus.OK.value(), quote==null ? "NOT-FOUND" : "SUCCESS", quote);
     }
 
+    @PutMapping("/{id}/public/{state}")
+    public ApiResponse<Quote> setState(@RequestHeader(HEADER_STRING) String token, @PathVariable int id, @PathVariable boolean state) {
+        String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
+        Quote quote = quoteService.changeState(id, state, username);
+        return new ApiResponse<>(HttpStatus.OK.value(), quote==null ? "NOT-FOUND" : "SUCCESS", quote);
+    }
+
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id) {
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
