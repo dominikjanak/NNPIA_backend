@@ -50,8 +50,12 @@ public class QuoteController {
     @GetMapping("/{id}")
     public ApiResponse<OutputQuoteDto> getOneQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id, Pageable pageable){
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
-        OutputQuoteDto quote = quoteService.convertQuote(quoteService.findById(id, username), username);
-        return new ApiResponse<>(HttpStatus.OK.value(), quote == null ? "NOT-EXISTS" : "SUCCESS", quote);
+        Quote quote = quoteService.findById(id, username);
+        if(quote == null){
+            return new ApiResponse<>(HttpStatus.OK.value(), "NOT-EXISTS", null);
+        }
+        OutputQuoteDto outputQuote = quoteService.convertQuote(quote, username);
+        return new ApiResponse<>(HttpStatus.OK.value(), "SUCCESS", outputQuote);
     }
 
     @PutMapping("/{id}")
