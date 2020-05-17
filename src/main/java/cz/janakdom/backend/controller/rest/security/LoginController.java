@@ -56,7 +56,8 @@ public class LoginController {
         return new ApiResponse<>(HttpStatus.NOT_ACCEPTABLE.value(), "INVALID-CREDENTIALS",false);
     }
 
-    @RequestMapping("/logout")
+    @GetMapping("/logout")
+    @PostMapping("/logout")
     public ApiResponse<Void> logout() throws AuthenticationException {
         return new ApiResponse<>(200, "success",null);
     }
