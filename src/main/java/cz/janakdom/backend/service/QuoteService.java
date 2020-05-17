@@ -128,7 +128,7 @@ public class QuoteService {
         return dao.save(newQuote);
     }
 
-    private Quote fillQuote(QuoteDto quote, String username, Quote filled){
+    public Quote fillQuote(QuoteDto quote, String username, Quote filled){
         if(filled == null){
             filled = new Quote();
         }

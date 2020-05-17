@@ -1,6 +1,6 @@
 package cz.janakdom.backend.service;
 
-import cz.janakdom.backend.dao.QuoteScoreDao;
+import cz.janakdom.backend.dao.QuoteRatingDao;
 import cz.janakdom.backend.model.database.Quote;
 import cz.janakdom.backend.model.database.QuoteRating;
 import cz.janakdom.backend.model.database.QuoteScoreKey;
@@ -15,13 +15,13 @@ import java.util.Optional;
 @Service(value = "quoteScoreService")
 public class QuoteRatingService {
 
-    private final QuoteScoreDao dao;
+    private final QuoteRatingDao dao;
 
     @Autowired private UserService userService;
     @Autowired private QuoteService quoteService;
 
     @Autowired
-    public QuoteRatingService(QuoteScoreDao dao) {
+    public QuoteRatingService(QuoteRatingDao dao) {
         this.dao = dao;
     }
 

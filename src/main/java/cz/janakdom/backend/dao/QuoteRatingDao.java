@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface QuoteScoreDao extends JpaRepository<QuoteRating, QuoteScoreKey> {
+public interface QuoteRatingDao extends JpaRepository<QuoteRating, QuoteScoreKey> {
     QuoteRating findByQuoteIdAndUserId(Integer quote_id, Integer user_id);
     List<QuoteRating> findAllByQuoteId(Integer quote_id);
     List<QuoteRating> findAllByUserId(Integer user_id);
