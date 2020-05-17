@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.test.annotation.DirtiesContext
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT
@@ -18,12 +19,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 class LoginCreatorTest {
 
     @Autowired
-    private Creator creator
+    private Creator creator;
 
     @Autowired
-    private Randomizer randomizer
+    private Randomizer randomizer;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
 
     @Test

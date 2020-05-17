@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.DirtiesContext
 
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT
@@ -25,7 +26,7 @@ class RegisterLoginTest {
             String username = "tomas";
 
             Browser.drive {
-                go 'http://localhost:3000/';
+                go 'http://127.0.0.1:3000/';
                 WebDriverWait wait = new WebDriverWait(driver, 10);
 
                 assert title == "Přihlášení | Citáty"
@@ -50,6 +51,7 @@ class RegisterLoginTest {
 
                 driver.findElement(By.xpath("//input[@value='Přihlásit se']")).click();
                 wait.until(ExpectedConditions.titleIs("Seznam citátů | Citáty"))
+
         }
 
     }
