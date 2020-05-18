@@ -18,7 +18,7 @@ public class QuoteRating {
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @MapsId("quote_id")
     @JoinColumn(name = "quote_id")
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
@@ -26,7 +26,7 @@ public class QuoteRating {
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @MapsId("user_id")
     @JoinColumn(name = "user_id")
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)

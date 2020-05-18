@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.janakdom.backend.model._base.BaseEntity;
 import lombok.*;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -22,6 +23,6 @@ public class Category extends BaseEntity {
 
     @Getter
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
-    @ManyToMany(mappedBy = "categories")
+    @ManyToMany(mappedBy = "categories", cascade = CascadeType.REMOVE)
     private final List<Quote> quotes = new ArrayList<>();
 }

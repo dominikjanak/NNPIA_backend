@@ -3,10 +3,8 @@ package cz.janakdom.backend.model.database;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.janakdom.backend.model._base.BaseEntity;
 import lombok.*;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +41,12 @@ public class User extends BaseEntity {
     private String email;
 
     @Getter
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
     private final List<Quote> quotes = new ArrayList<>();
 
     @Getter
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
     private final List<QuoteRating> ratedQuotes = new ArrayList<>();
 }

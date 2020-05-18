@@ -35,7 +35,7 @@ public class Quote extends BaseEntity {
     private User user;
 
     @Getter
-    @OneToMany(mappedBy = "quote", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "quote", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private final List<QuoteRating> scores = new ArrayList<>();
 
     @Getter
