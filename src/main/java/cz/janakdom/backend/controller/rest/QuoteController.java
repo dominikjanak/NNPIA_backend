@@ -2,9 +2,11 @@ package cz.janakdom.backend.controller.rest;
 
 import cz.janakdom.backend.model.ApiResponse;
 import cz.janakdom.backend.model.database.Quote;
+import cz.janakdom.backend.model.database.QuoteRating;
 import cz.janakdom.backend.model.dto.OutputQuoteDto;
 import cz.janakdom.backend.model.dto.QuoteDto;
 import cz.janakdom.backend.security.JwtUtil;
+import cz.janakdom.backend.service.QuoteRatingService;
 import cz.janakdom.backend.service.QuoteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,8 @@ public class QuoteController {
 
     @Autowired
     private QuoteService quoteService;
+    @Autowired
+    private QuoteRatingService quoteRatingService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -92,7 +96,14 @@ public class QuoteController {
     public ApiResponse<Void> deleteQuote(@RequestHeader(HEADER_STRING) String token, @PathVariable int id) {
         String username = jwtUtil.extractUsername(jwtUtil.extractToken(token));
         Quote quote = quoteService.findById(id, username);
-        if(quote != null) quoteService.delete(quote.getId());
+
+        if (quote != null) {
+            for(QuoteRating r: quote.getScores()){
+                quoteRatingService.delete(r);
+            }
+            quoteService.delete(quote.getId());
+        }
+
         return new ApiResponse<Void>(HttpStatus.OK.value(), quote == null ? "NOT-FOUND" : "SUCCESS", null);
     }
 }

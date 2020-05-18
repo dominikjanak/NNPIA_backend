@@ -41,12 +41,12 @@ public class User extends BaseEntity {
     private String email;
 
     @Getter
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
     private final List<Quote> quotes = new ArrayList<>();
 
     @Getter
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user")
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
     private final List<QuoteRating> ratedQuotes = new ArrayList<>();
 }

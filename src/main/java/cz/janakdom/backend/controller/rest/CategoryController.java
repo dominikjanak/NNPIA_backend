@@ -58,7 +58,16 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteCategory(@PathVariable int id) {
         Category category = categoryService.findById(id);
-        if(category != null) categoryService.delete(id);
+
+        if(category != null) {
+            if(category.getQuotes().size() == 0){
+                categoryService.delete(id);
+            }
+            else {
+                return new ApiResponse<Void>(HttpStatus.OK.value(), "CANNOT-BE-DELETE", null);
+            }
+        }
+
         return new ApiResponse<Void>(HttpStatus.OK.value(), category == null ? "NOT-FOUND" : "SUCCESS", null);
     }
 }

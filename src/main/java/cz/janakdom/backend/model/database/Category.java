@@ -23,6 +23,6 @@ public class Category extends BaseEntity {
 
     @Getter
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
-    @ManyToMany(mappedBy = "categories", cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "categories")
     private final List<Quote> quotes = new ArrayList<>();
 }

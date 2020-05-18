@@ -58,7 +58,15 @@ public class AuthorController {
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteAuthor(@PathVariable int id) {
         Author author = authorService.findById(id);
-        if(author != null) authorService.delete(id);
+
+        if(author != null){
+            if(author.getQuotes().size() == 0){
+                authorService.delete(id);
+            }
+            else {
+                return new ApiResponse<Void>(HttpStatus.OK.value(), "CANNOT-BE-DELETE", null);
+            }
+        }
         return new ApiResponse<Void>(HttpStatus.OK.value(), author == null ? "NOT-FOUND" : "SUCCESS", null);
     }
 }
