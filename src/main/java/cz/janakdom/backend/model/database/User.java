@@ -53,4 +53,9 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "area_id", nullable = false)
     private Area area;
+
+    @Getter
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "manager")
+    @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
+    private final List<SecurityIncident> responsibleFor = new ArrayList<>();
 }
