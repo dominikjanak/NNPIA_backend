@@ -1,7 +1,6 @@
 package cz.janakdom.backend.model.database;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import cz.janakdom.backend.model._base.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,8 +9,13 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity(name = "user")
-public class User extends BaseEntity {
+public class User {
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer id;
 
     @Getter
     @Setter
@@ -30,23 +34,23 @@ public class User extends BaseEntity {
 
     @Getter
     @Setter
-    @Column(length = 100)
+    @Column(nullable = false, length = 200)
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Getter
     @Setter
-    @Column(length = 100, unique = true)
+    @Column(nullable = false, length = 100, unique = true)
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
     private String email;
 
     @Getter
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
-    private final List<Quote> quotes = new ArrayList<>();
+    private final List<Role> roles = new ArrayList<>();
 
     @Getter
-    @OneToMany(mappedBy = "user")
-    @JsonProperty(access =  JsonProperty.Access.WRITE_ONLY)
-    private final List<QuoteRating> ratedQuotes = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "area_id", nullable = false)
+    private Area area;
 }
